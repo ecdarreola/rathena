@@ -6469,7 +6469,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						RE_LVL_DMOD(100);
 						break;
 					case WL_COMET:
-						skillratio += -100 + 2500 + 500 * skill_lv;
+						skillratio += -100 + 2500 + 700 * skill_lv;
 						RE_LVL_DMOD(100);
 						break;
 					case WL_CHAINLIGHTNING_ATK:
@@ -6489,7 +6489,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						if (skill_lv < 6)
 							skillratio += -100 + 500 + 500 * skill_lv;
 						else
-							skillratio += -100 + 3000 + 200 * (skill_lv - 5);
+							skillratio += -100 + 3000 + 360 * (skill_lv - 5);
 						break;
 					case WL_SUMMON_ATK_FIRE:
 					case WL_SUMMON_ATK_WATER:
