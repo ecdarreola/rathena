@@ -4713,7 +4713,7 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 		}
         if (sc->data[SC_STRIKING]) {
 			skill = pc_checkskill(sd, SO_STRIKING);
-            sd->bonus.perfect_hit += 14 * skill;
+            sd->bonus.perfect_hit += 20 + 10 * skill;
 		}
 	}
 	status_cpy(&sd->battle_status, base_status);
