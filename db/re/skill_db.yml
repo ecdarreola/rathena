@@ -22313,13 +22313,12 @@ Body:
     Hit: Multi_Hit
     HitCount: -3
     Element: Weapon
-    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
     CastCancel: true
-    CastTime: 1000
-    AfterCastActDelay: 500
+    AfterCastActDelay: 350
+    Cooldown: 350
     FixedCastTime: -1
     Requires:
       SpCost:
