@@ -23779,7 +23779,7 @@ Body:
     MaxLevel: 10
     Type: Weapon
     TargetType: Attack
-    Range: 1
+    Range: 2
     Hit: Multi_Hit
     HitCount: -2
     Element: Weapon
@@ -23904,7 +23904,7 @@ Body:
     TargetType: Self
     Flags:
       NoTargetSelf: true
-    Range: 1
+    Range: 2
     Hit: Multi_Hit
     HitCount: -2
     Element: Weapon
@@ -23978,7 +23978,7 @@ Body:
     Description: Tiger Cannon
     MaxLevel: 10
     Type: Weapon
-    TargetType: Attack
+    TargetType: Self
     DamageFlags:
       Splash: true
       IgnoreFlee: true
@@ -23990,25 +23990,25 @@ Body:
     Element: Weapon
     SplashArea:
       - Level: 1
-        Area: 1
+        Area: 2
       - Level: 2
-        Area: 1
+        Area: 2
       - Level: 3
-        Area: 1
+        Area: 2
       - Level: 4
-        Area: 1
+        Area: 2
       - Level: 5
-        Area: 1
+        Area: 2
       - Level: 6
-        Area: 2
+        Area: 7
       - Level: 7
-        Area: 2
+        Area: 7
       - Level: 8
-        Area: 2
+        Area: 7
       - Level: 9
-        Area: 2
+        Area: 7
       - Level: 10
-        Area: 2
+        Area: 7
     CopyFlags:
       Skill:
         Reproduce: true
@@ -24035,7 +24035,7 @@ Body:
       - Level: 10
         Time: 2000
     AfterCastActDelay: 1000
-    Cooldown: 5000
+    Cooldown: 3000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -24115,7 +24115,7 @@ Body:
       SpCost: 100
       Status:
         Explosionspirits: true
-      SpiritSphereCost: 5
+      SpiritSphereCost: 3
   - Id: 2333
     Name: SR_CRESCENTELBOW
     Description: Crescent Elbow
@@ -24384,7 +24384,7 @@ Body:
       - Level: 9
         Time: 150000
       - Level: 10
-        Time: 165000
+        Time: 300000
     Cooldown: 30000
     FixedCastTime: -1
     Requires:
@@ -24720,17 +24720,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    SplashArea:
-      - Level: 1
-        Area: 3
-      - Level: 2
-        Area: 4
-      - Level: 3
-        Area: 5
-      - Level: 4
-        Area: 6
-      - Level: 5
-        Area: 7
+    SplashArea: 4
     CopyFlags:
       Skill:
         Reproduce: true
@@ -24749,17 +24739,7 @@ Body:
     Cooldown: 10000
     FixedCastTime: 500
     Requires:
-      SpCost:
-        - Level: 1
-          Amount: 80
-        - Level: 2
-          Amount: 90
-        - Level: 3
-          Amount: 100
-        - Level: 4
-          Amount: 110
-        - Level: 5
-          Amount: 120
+      SpCost: 70
       SpiritSphereCost:
         - Level: 1
           Amount: 1
@@ -24768,9 +24748,9 @@ Body:
         - Level: 3
           Amount: 3
         - Level: 4
-          Amount: 4
+          Amount: 3
         - Level: 5
-          Amount: 5
+          Amount: 3
   - Id: 2518
     Name: SR_RIDEINLIGHTNING
     Description: Ride In Lightening
@@ -24797,18 +24777,8 @@ Body:
     CopyFlags:
       Skill:
         Reproduce: true
-    CastTime:
-      - Level: 1
-        Time: 1000
-      - Level: 2
-        Time: 2000
-      - Level: 3
-        Time: 3000
-      - Level: 4
-        Time: 4000
-      - Level: 5
-        Time: 5000
-    Cooldown: 1000
+    CastTime: 1000
+    Cooldown: 500
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -24822,17 +24792,7 @@ Body:
           Amount: 70
         - Level: 5
           Amount: 80
-      SpiritSphereCost:
-        - Level: 1
-          Amount: 1
-        - Level: 2
-          Amount: 2
-        - Level: 3
-          Amount: 3
-        - Level: 4
-          Amount: 4
-        - Level: 5
-          Amount: 5
+      SpiritSphereCost: 2
   - Id: 2350
     Name: WA_SWING_DANCE
     Description: Swing Dance
@@ -31930,7 +31890,7 @@ Body:
       - Level: 4
         Time: 6000
       - Level: 5
-        Time: 4000
+        Time: 3000
     FixedCastTime: -1
     Requires:
       SpCost: 65
