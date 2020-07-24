@@ -4158,10 +4158,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += ((skill_lv - 1) % 5 + 1) * 100;
 			break;
 		case RK_SONICWAVE:
-			if( skill_lv == 10 )
 				skillratio += -100 + 500 + 175 * skill_lv;
-			else 
-				skillratio += -100 + 500 + 100 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
 		case RK_HUNDREDSPEAR:
@@ -4183,17 +4180,11 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case RK_IGNITIONBREAK:
-			if( skill_lv == 5 )
-				skillratio += -100 + 550 * skill_lv;
-			else
-				skillratio += -100 + 400 * skill_lv;
+			skillratio += -100 + 550 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
 		case RK_STORMBLAST:
-			if( status_get_str(src) >= 120 )
-				skillratio += -100 + 600 + (((sd) ? pc_checkskill(sd,RK_RUNEMASTERY) : 0) + status_get_str(src) / 8) * 100; // ATK = [{Rune Mastery Skill Level + (Caster's STR / 8)} x 100] %
-			else
-				skillratio += -100 + (((sd) ? pc_checkskill(sd,RK_RUNEMASTERY) : 0) + status_get_str(src) / 8) * 100; // ATK = [{Rune Mastery Skill Level + (Caster's STR / 8)} x 100] %
+			skillratio += -100 + (((sd) ? pc_checkskill(sd,RK_RUNEMASTERY) : 0) + status_get_str(src) / 6) * 100; // ATK = [{Rune Mastery Skill Level + (Caster's STR / 8)} x 100] %
 			RE_LVL_DMOD(100);
 			break;
 		case RK_PHANTOMTHRUST: // ATK = [{(Skill Level x 50) + (Spear Master Level x 10)} x Caster's Base Level / 150] %
