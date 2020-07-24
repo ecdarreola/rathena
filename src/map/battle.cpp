@@ -3965,10 +3965,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case SN_SHARPSHOOTING:
 		case MA_SHARPSHOOTING:
 #ifdef RENEWAL
-			if( skill_lv == 5 )
-				skillratio += 50 + 350 * skill_lv;
-			else
-				skillratio += 50 + 200 * skill_lv;
+			skillratio += 50 + 350 * skill_lv;
 			RE_LVL_DMOD(100);
 #else
 			skillratio += 100 + 50 * skill_lv;
@@ -4222,12 +4219,9 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case RA_ARROWSTORM:
 		case NPC_ARROWSTORM:
 #ifdef RENEWAL
-			if( skill_lv > 5 ) {
-				skillratio += 900 + 100 * skill_lv;
-				if (sc && sc->data[SC_FEARBREEZE])
-					skillratio += 700;
-			} else
-				skillratio += 900 + 80 * skill_lv;
+			skillratio += 900 + 100 * skill_lv;
+			if (sc && sc->data[SC_FEARBREEZE])
+				skillratio += 700;
 #else
 			skillratio += 900 + 80 * skill_lv;
 #endif
