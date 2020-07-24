@@ -21044,28 +21044,28 @@ Body:
     Element: Weapon
     CastTime:
       - Level: 1
-        Time: 200
+        Time: 100
       - Level: 2
-        Time: 400
+        Time: 200
       - Level: 3
-        Time: 600
+        Time: 300
       - Level: 4
-        Time: 800
+        Time: 400
       - Level: 5
-        Time: 1000
+        Time: 500
     FixedCastTime: -1
     Requires:
       SpCost:
         - Level: 1
-          Amount: 3
+          Amount: 5
         - Level: 2
-          Amount: 6
+          Amount: 10
         - Level: 3
-          Amount: 9
-        - Level: 4
-          Amount: 12
-        - Level: 5
           Amount: 15
+        - Level: 4
+          Amount: 20
+        - Level: 5
+          Amount: 25
       State: Mado
   - Id: 2257
     Name: NC_PILEBUNKER
@@ -21105,7 +21105,8 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    SplashArea: 1
+    SplashArea: 2
+    CastTime: 200
     AfterCastActDelay:
       - Level: 1
         Time: 300
@@ -21113,15 +21114,16 @@ Body:
         Time: 200
       - Level: 3
         Time: 100
+    Cooldown: 100
     FixedCastTime: -1
     Requires:
       SpCost:
         - Level: 1
-          Amount: 2
+          Amount: 5
         - Level: 2
-          Amount: 4
+          Amount: 10
         - Level: 3
-          Amount: 6
+          Amount: 15
       State: Mado
       ItemCost:
         - Item: Vulcan_Bullet
@@ -21228,17 +21230,7 @@ Body:
       IgnoreFlee: true
     Flags:
       AllowOnMado: true
-    Range:
-      - Level: 1
-        Size: 9
-      - Level: 2
-        Size: 9
-      - Level: 3
-        Size: 11
-      - Level: 4
-        Size: 11
-      - Level: 5
-        Size: 13
+    Range: 9
     Hit: Single
     HitCount: 1
     Element: Weapon
@@ -21252,41 +21244,41 @@ Body:
       - Level: 4
         Area: 2
       - Level: 5
-        Area: 3
+        Area: 2
     CastTime:
       - Level: 1
-        Time: 1400
+        Time: 1200
       - Level: 2
-        Time: 1600
+        Time: 1400
       - Level: 3
-        Time: 1800
+        Time: 1600
       - Level: 4
-        Time: 2000
+        Time: 1800
       - Level: 5
-        Time: 2200
+        Time: 2000
     AfterCastActDelay: 1000
     Cooldown:
       - Level: 1
-        Time: 150
+        Time: 180
       - Level: 2
-        Time: 200
+        Time: 210
       - Level: 3
-        Time: 300
+        Time: 240
       - Level: 4
-        Time: 450
+        Time: 270
       - Level: 5
-        Time: 650 
+        Time: 300 
     FixedCastTime:
       - Level: 1
-        Time: 600
+        Time: 300
       - Level: 2
-        Time: 400
+        Time: 200
       - Level: 3
-        Time: 400
+        Time: 200
       - Level: 4
-        Time: 200
+        Time: 100
       - Level: 5
-        Time: 200
+        Time: 100
     Requires:
       SpCost:
         - Level: 1
@@ -21910,28 +21902,17 @@ Body:
         Time: 2000
     FixedCastTime: -1
     Requires:
-      HpCost:
-        - Level: 1
-          Amount: 20
-        - Level: 2
-          Amount: 40
-        - Level: 3
-          Amount: 60
-        - Level: 4
-          Amount: 80
-        - Level: 5
-          Amount: 100
       SpCost:
         - Level: 1
-          Amount: 18
+          Amount: 25
         - Level: 2
-          Amount: 20
+          Amount: 30
         - Level: 3
-          Amount: 22
+          Amount: 35
         - Level: 4
-          Amount: 24
+          Amount: 40
         - Level: 5
-          Amount: 26
+          Amount: 45
       Weapon:
         1hAxe: true
         2hAxe: true
