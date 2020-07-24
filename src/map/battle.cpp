@@ -6122,6 +6122,10 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 			if(sd && sd->spiritcharm_type != CHARM_TYPE_NONE && sd->spiritcharm > 0)
 				s_ele = sd->spiritcharm_type;
 			break;
+		case AB_ADORAMUS:
+			if( sc & sc->data[SC_ANCILLA] )
+				s_ele = ELE_NEUTRAL;
+			break;
 	}
 
 	//Set miscellaneous data that needs be filled
@@ -6411,11 +6415,11 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						break;
 #endif
 					case AB_JUDEX:
-						skillratio += -100 + 300 + 40 * skill_lv;
+						skillratio += -100 + 300 + 70 * skill_lv;
 						RE_LVL_DMOD(100);
 						break;
 					case AB_ADORAMUS:
-						skillratio += 230 + 70 * skill_lv;
+						skillratio += 250 + 180 * skill_lv;
 						RE_LVL_DMOD(100);
 						break;
 					case AB_DUPLELIGHT_MAGIC:
