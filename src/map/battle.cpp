@@ -6117,6 +6117,8 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				else if( sc->data[SC_CURSED_SOIL_OPTION] )
 					s_ele = sc->data[SC_CURSED_SOIL_OPTION]->val3;
 			}
+			if( sd->status.weapon == W_BOOK || sd->status.weapon == W_STAFF  || sd->status.weapon == W_2HSTAFF )
+				ad.div_ = 2;
 			break;
 		case KO_KAIHOU:
 			if(sd && sd->spiritcharm_type != CHARM_TYPE_NONE && sd->spiritcharm > 0)
@@ -6252,7 +6254,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					case MG_COLDBOLT:
 					case MG_LIGHTNINGBOLT:
 						if (sc && sc->data[SC_SPELLFIST] && mflag&BF_SHORT)  {
-							skillratio += (sc->data[SC_SPELLFIST]->val4 * 100) + (sc->data[SC_SPELLFIST]->val1 * 50) - 100;// val4 = used bolt level, val2 = used spellfist level. [Rytech]
+							skillratio += (sc->data[SC_SPELLFIST]->val4 * 50) + (sc->data[SC_SPELLFIST]->val1 * 20) - 100;// val4 = used bolt level, val2 = used spellfist level. [Rytech]
 							ad.div_ = 1; // ad mods, to make it work similar to regular hits [Xazax]
 							ad.flag = BF_WEAPON|BF_SHORT;
 							ad.type = DMG_NORMAL;
@@ -6546,25 +6548,31 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 							skillratio += (sd ? sd->status.job_level / 2 : 0);
 						break;
 					case SO_EARTHGRAVE:
+						// by how much is the increase? Not sure so leaving it alone. Figures are needed.
 						skillratio += -100 + sstatus->int_ * skill_lv + ((sd) ? pc_checkskill(sd, SA_SEISMICWEAPON) * 200 : 0);
 						RE_LVL_DMOD(100);
 						if( sc && sc->data[SC_CURSED_SOIL_OPTION] )
 							skillratio += (sd ? sd->status.job_level * 5 : 0);
 						break;
 					case SO_DIAMONDDUST:
+						// by how much is the increase? Not sure so leaving it alone.
 						skillratio = ( 200 * ((sd) ? pc_checkskill(sd, SA_FROSTWEAPON) : 0) + sstatus->int_ * skill_lv );
 						RE_LVL_DMOD(100);
 						if( sc && sc->data[SC_COOLER_OPTION] )
 							skillratio += (sd ? sd->status.job_level * 5 : 0);
 						break;
 					case SO_POISON_BUSTER:
-						skillratio += 900 + 300 * skill_lv;
-						RE_LVL_DMOD(120);
+						skillratio += 900 + 300 * skill_lv + sstatus->int_;
+						if( tsc && tsc->data[SC_CLOUD_POISON] )
+							skillratio += 200 * skill_lv;
+						RE_LVL_DMOD(100);
 						if( sc && sc->data[SC_CURSED_SOIL_OPTION] )
 							skillratio += (sd ? sd->status.job_level * 5 : 0);
 						break;
 					case SO_PSYCHIC_WAVE:
 						skillratio += -100 + 70 * skill_lv + 3 * sstatus->int_;
+						if( sd->status.weapon == W_BOOK || sd->status.weapon == W_STAFF  || sd->status.weapon == W_2HSTAFF )
+							skillratio *= 2;
 						RE_LVL_DMOD(100);
 						if (sc && (sc->data[SC_HEATER_OPTION] || sc->data[SC_COOLER_OPTION] ||
 							sc->data[SC_BLAST_OPTION] || sc->data[SC_CURSED_SOIL_OPTION]))
@@ -6577,6 +6585,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 							skillratio += (sd ? sd->status.job_level : 0);
 						break;
 					case SO_VARETYR_SPEAR: //MATK [{( Endow Tornado skill level x 50 ) + ( Caster INT x Varetyr Spear Skill level )} x Caster Base Level / 100 ] %
+						// by how much is the increase? Not sure so leaving it alone.
 						skillratio += -100 + status_get_int(src) * skill_lv + ((sd) ? pc_checkskill(sd, SA_LIGHTNINGLOADER) * 50 : 0);
 						RE_LVL_DMOD(100);
 						if (sc && sc->data[SC_BLAST_OPTION])

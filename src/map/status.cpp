@@ -949,8 +949,8 @@ void initChangeTables(void)
 	set_sc( SO_ELECTRICWALK		, SC_PROPERTYWALK	, EFST_PROPERTYWALK	, SCB_NONE );
 	set_sc( SO_SPELLFIST		, SC_SPELLFIST		, EFST_SPELLFIST		, SCB_NONE );
 	set_sc_with_vfx( SO_DIAMONDDUST	, SC_CRYSTALIZE		, EFST_COLD		, SCB_NONE );
-	set_sc( SO_CLOUD_KILL   , SC_POISON         , EFST_CLOUD_KILL, SCB_NONE );
-	set_sc( SO_STRIKING		, SC_STRIKING		, EFST_STRIKING		, SCB_WATK|SCB_CRI );
+	set_sc( SO_CLOUD_KILL   , SC_CLOUD_POISON         , EFST_CLOUD_POISON, SCB_NONE );
+	set_sc( SO_STRIKING		, SC_STRIKING		, EFST_STRIKING		, SCB_WATK );
 	set_sc( SO_WARMER		, SC_WARMER		, EFST_WARMER		, SCB_NONE );
 	set_sc( SO_VACUUM_EXTREME	, SC_VACUUM_EXTREME	, EFST_VACUUM_EXTREME	, SCB_NONE );
 	set_sc( SO_ARRULLO		, SC_DEEPSLEEP		, EFST_HANDICAPSTATE_DEEP_SLEEP, SCB_NONE );
@@ -1394,6 +1394,8 @@ void initChangeTables(void)
 	StatusIconChangeTable[SC_SOULENERGY] = EFST_SOULENERGY;
 	StatusIconChangeTable[SC_USE_SKILL_SP_SPA] = EFST_USE_SKILL_SP_SPA;
 	StatusIconChangeTable[SC_USE_SKILL_SP_SHA] = EFST_USE_SKILL_SP_SHA;
+	
+	StatusChangeFlagTable[SC_CLOUD_POISON] |= EFST_CLOUD_POISON;
 
 	/* Other SC which are not necessarily associated to skills */
 	StatusChangeFlagTable[SC_ASPDPOTION0] |= SCB_ASPD;
@@ -1569,6 +1571,8 @@ void initChangeTables(void)
 
 	StatusChangeFlagTable[SC_ANCILLA] |= SCB_REGEN;
 	StatusChangeFlagTable[SC_ENSEMBLEFATIGUE] |= SCB_SPEED|SCB_ASPD;
+	
+	StatusChangeFlagTable[SC_CLOUD_POISON] |= SCB_NONE;
 
 #ifdef RENEWAL
 	// renewal EDP increases your weapon atk
@@ -4703,6 +4707,10 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 			sd->bonus.short_attack_atk_rate += sc->data[SC_LUXANIMA]->val3;
 			sd->bonus.long_attack_atk_rate += sc->data[SC_LUXANIMA]->val3;
 		}
+		if (sc->data[SC_CLOUD_POISON]) {
+			skill = pc_checkskill(sd, SO_CLOUD_KILL);
+			sd->subele[ELE_POISON] -= 5 * skill;
+		}
 	}
 	status_cpy(&sd->battle_status, base_status);
 
@@ -6787,8 +6795,6 @@ static signed short status_calc_critical(struct block_list *bl, struct status_ch
 		critical += sc->data[SC_TRUESIGHT]->val2;
 	if (sc->data[SC_CLOAKING])
 		critical += critical;
-	if (sc->data[SC_STRIKING])
-		critical += critical * sc->data[SC_STRIKING]->val1 / 100;
 #ifdef RENEWAL
 	if (sc->data[SC_SPEARQUICKEN])
 		critical += 3*sc->data[SC_SPEARQUICKEN]->val1*10;

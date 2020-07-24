@@ -26218,25 +26218,25 @@ Body:
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 15000
-      - Level: 2
-        Time: 20000
-      - Level: 3
-        Time: 25000
-      - Level: 4
-        Time: 30000
-      - Level: 5
-        Time: 35000
-      - Level: 6
-        Time: 40000
-      - Level: 7
         Time: 45000
-      - Level: 8
-        Time: 50000
-      - Level: 9
-        Time: 55000
-      - Level: 10
+      - Level: 2
         Time: 60000
+      - Level: 3
+        Time: 75000
+      - Level: 4
+        Time: 90000
+      - Level: 5
+        Time: 105000
+      - Level: 6
+        Time: 120000
+      - Level: 7
+        Time: 135000
+      - Level: 8
+        Time: 150000
+      - Level: 9
+        Time: 165000
+      - Level: 10
+        Time: 180000
     Requires:
       SpCost:
         - Level: 1
@@ -26437,13 +26437,13 @@ Body:
       - Level: 1
         Area: 1
       - Level: 2
-        Area: 1
-      - Level: 3
-        Area: 1
-      - Level: 4
-        Area: 1
-      - Level: 5
         Area: 2
+      - Level: 3
+        Area: 2
+      - Level: 4
+        Area: 3
+      - Level: 5
+        Area: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -26634,9 +26634,6 @@ Body:
           Amount: 70
         - Level: 5
           Amount: 78
-      ItemCost:
-        - Item: Red_Gemstone
-          Amount: 2
     Unit:
       Id: Cloud_Kill
       Range: 3
@@ -26658,7 +26655,7 @@ Body:
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
-    Duration1: 60000
+    Duration1: 90000
     Cooldown: 2000
     FixedCastTime: -1
     Requires:
