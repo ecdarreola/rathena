@@ -9958,25 +9958,25 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 14
+          Amount: 35
         - Level: 2
-          Amount: 18
+          Amount: 40
         - Level: 3
-          Amount: 22
+          Amount: 45
         - Level: 4
-          Amount: 26
-        - Level: 5
-          Amount: 30
-        - Level: 6
-          Amount: 34
-        - Level: 7
-          Amount: 38
-        - Level: 8
-          Amount: 42
-        - Level: 9
-          Amount: 46
-        - Level: 10
           Amount: 50
+        - Level: 5
+          Amount: 55
+        - Level: 6
+          Amount: 60
+        - Level: 7
+          Amount: 65
+        - Level: 8
+          Amount: 70
+        - Level: 9
+          Amount: 75
+        - Level: 10
+          Amount: 80
   - Id: 367
     Name: PA_PRESSURE
     Description: Gloria Domini
@@ -13255,15 +13255,15 @@ Body:
     Hit: Multi_Hit
     HitCount:
       - Level: 1
-        Count: 10
+        Count: 2
       - Level: 2
-        Count: 12
+        Count: 4
       - Level: 3
-        Count: 14
+        Count: 6
       - Level: 4
-        Count: 16
+        Count: 8
       - Level: 5
-        Count: 18
+        Count: 10
     CastCancel: true
     CastTime: 5000
     AfterCastActDelay: 1000

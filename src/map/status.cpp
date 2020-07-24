@@ -6739,7 +6739,7 @@ static unsigned short status_calc_matk(struct block_list *bl, struct status_chan
 		matk += sc->data[SC_QUEST_BUFF2]->val1;
 	if (sc->data[SC_QUEST_BUFF3])
 		matk += sc->data[SC_QUEST_BUFF3]->val1;
-	if (sc->data[SC_MAGICPOWER] && sc->data[SC_MAGICPOWER]->val4)
+	if (sc->data[SC_MAGICPOWER])
 		matk += matk * sc->data[SC_MAGICPOWER]->val3/100;
 	if (sc->data[SC_MINDBREAKER])
 		matk += matk * sc->data[SC_MINDBREAKER]->val2/100;
@@ -10323,7 +10323,8 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_MAGICPOWER:
 			// val1: Skill lv
-			val2 = 1; // Lasts 1 invocation
+			// am I supposed to last as the skill duration like skill_get_time?
+			// val2 = 1; // Lasts 1 invocation
 			val3 = 5*val1; // Matk% increase
 			val4 = 0; // 0 = ready to be used, 1 = activated and running
 			break;
