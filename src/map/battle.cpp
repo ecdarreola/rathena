@@ -3601,9 +3601,6 @@ static void battle_calc_multi_attack(struct Damage* wd, struct block_list *src,s
 			if (sd && sd->weapontype1 == W_2HSWORD)
 				wd->div_ = 2;
 			break;
-		case RA_AIMEDBOLT:
-			wd->div_ = 5;
-			break;
 		case SC_FATALMENACE:
 			if (sd && sd->weapontype1 == W_DAGGER)
 				wd->div_++;
@@ -4240,7 +4237,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += 100 + 20 * skill_lv + 500;
 #ifdef RENEWAL
 			if (sc && sc->data[SC_FEARBREEZE])
-				skillratio *= 5;
+				skillratio += 250;
 #endif
 			RE_LVL_DMOD(100);
 			break;

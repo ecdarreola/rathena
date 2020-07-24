@@ -20436,7 +20436,7 @@ Body:
       AlterRangeVulture: true
     Range: 9
     Hit: Multi_Hit
-    HitCount: 1
+    HitCount: 5
     Element: Weapon
     CopyFlags:
       Skill:
