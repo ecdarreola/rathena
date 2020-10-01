@@ -25094,17 +25094,7 @@ Body:
     Range: 9
     Hit: Multi_Hit
     HitCount: -10
-    SplashArea:
-      - Level: 1
-        Area: 2
-      - Level: 2
-        Area: 2
-      - Level: 3
-        Area: 2
-      - Level: 4
-        Area: 3
-      - Level: 5
-        Area: 3
+    SplashArea: 2
     CopyFlags:
       Skill:
         Reproduce: true
@@ -25116,18 +25106,18 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 28
+          Amount: 56
         - Level: 2
-          Amount: 32
+          Amount: 62
         - Level: 3
-          Amount: 38
+          Amount: 68
         - Level: 4
-          Amount: 42
+          Amount: 74
         - Level: 5
-          Amount: 48
+          Amount: 80
       Ammo:
         Arrow: true
-      AmmoAmount: 10
+      AmmoAmount: 5
   - Id: 2415 # Removed on kRO
     Name: WM_REVERBERATION_MELEE
     Description: Reverberation Melee
@@ -25229,7 +25219,7 @@ Body:
         Whip: true
       Ammo:
         Arrow: true
-      AmmoAmount: 20
+      AmmoAmount: 10
     Unit:
       Id: Severe_Rainstorm
       Range: 5
