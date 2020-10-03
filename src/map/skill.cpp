@@ -20501,20 +20501,20 @@ void skill_toggle_magicpower(struct block_list *bl, uint16 skill_id)
 	if (skill_get_nk(skill_id, NK_NODAMAGE) || !(skill_get_type(skill_id)&BF_MAGIC))
 		return;
 
-	if (sc && sc->count && sc->data[SC_MAGICPOWER]) {
-		if (sc->data[SC_MAGICPOWER]->val4) {
-			status_change_end(bl, SC_MAGICPOWER, INVALID_TIMER);
-		} else {
-			sc->data[SC_MAGICPOWER]->val4 = 1;
-			status_calc_bl(bl, status_sc2scb_flag(SC_MAGICPOWER));
-#ifndef RENEWAL
-			if(bl->type == BL_PC){// update current display.
-				clif_updatestatus(((TBL_PC *)bl),SP_MATK1);
-				clif_updatestatus(((TBL_PC *)bl),SP_MATK2);
-			}
-#endif
-		}
-	}
+//	if (sc && sc->count && sc->data[SC_MAGICPOWER]) {
+//		if (sc->data[SC_MAGICPOWER]->val4) {
+//			status_change_end(bl, SC_MAGICPOWER, INVALID_TIMER);
+//		} else {
+//			sc->data[SC_MAGICPOWER]->val4 = 1;
+//			status_calc_bl(bl, status_sc2scb_flag(SC_MAGICPOWER));
+//#ifndef RENEWAL
+//			if(bl->type == BL_PC){// update current display.
+//				clif_updatestatus(((TBL_PC *)bl),SP_MATK1);
+//				clif_updatestatus(((TBL_PC *)bl),SP_MATK2);
+//			}
+//#endif
+//		}
+//	}
 }
 
 
@@ -20604,7 +20604,7 @@ void skill_spellbook(struct map_session_data *sd, t_itemid nameid) {
 	int points = spell->points;
 
 	if (sc && sc->data[SC_FREEZE_SP]) {
-		if ((sc->data[SC_FREEZE_SP]->val2 + points) > 4 * pc_checkskill(sd, WL_FREEZE_SP) + status_get_int(&sd->bl) / 10 + sd->status.base_level / 10) {
+		if ((sc->data[SC_FREEZE_SP]->val2 + points) > 8 * pc_checkskill(sd, WL_FREEZE_SP) + status_get_int(&sd->bl) / 10 + sd->status.base_level / 10) {
 			clif_skill_fail(sd, WL_READING_SB, USESKILL_FAIL_SPELLBOOK_PRESERVATION_POINT, 0);
 			return;
 		}

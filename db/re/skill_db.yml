@@ -9950,7 +9950,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
-    Duration1: 30000
+    Duration1: 60000
     FixedCastTime: 700
     CastTimeFlags:
       IgnoreDex: true
@@ -13255,15 +13255,15 @@ Body:
     Hit: Multi_Hit
     HitCount:
       - Level: 1
-        Count: 10
+        Count: 2
       - Level: 2
-        Count: 12
+        Count: 4
       - Level: 3
-        Count: 14
+        Count: 6
       - Level: 4
-        Count: 16
+        Count: 8
       - Level: 5
-        Count: 18
+        Count: 10
     CastCancel: true
     CastTime: 5000
     AfterCastActDelay: 1000
