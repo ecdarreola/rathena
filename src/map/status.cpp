@@ -889,7 +889,7 @@ void initChangeTables(void)
 
 	/* Shadow Chaser */
 	set_sc( SC_REPRODUCE		, SC__REPRODUCE		, EFST_REPRODUCE		, SCB_NONE );
-	set_sc( SC_AUTOSHADOWSPELL	, SC__AUTOSHADOWSPELL	, EFST_AUTOSHADOWSPELL	, SCB_NONE );
+	set_sc( SC_AUTOSHADOWSPELL	, SC__AUTOSHADOWSPELL	, EFST_AUTOSHADOWSPELL	, SCB_MATK );
 	set_sc( SC_SHADOWFORM		, SC__SHADOWFORM	, EFST_SHADOWFORM		, SCB_NONE );
 	set_sc( SC_BODYPAINT		, SC__BODYPAINT		, EFST_BODYPAINT		, SCB_ASPD );
 	set_sc( SC_INVISIBILITY		, SC__INVISIBILITY	, EFST_INVISIBILITY	, SCB_ASPD|SCB_CRI|SCB_ATK_ELE );
@@ -3411,7 +3411,7 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 			if(sc->data[SC_INSPIRATION])
 				bonus += (5 * sc->data[SC_INSPIRATION]->val1);
 			if(sc->data[SC_RAISINGDRAGON])
-				bonus += (2 + sc->data[SC_RAISINGDRAGON]->val1);
+				bonus += (sc->data[SC_RAISINGDRAGON]->val1);
 			if(sc->data[SC_GT_REVITALIZE])
 				bonus += sc->data[SC_GT_REVITALIZE]->val2;
 			if(sc->data[SC_ANGRIFFS_MODUS])
@@ -3569,7 +3569,7 @@ static int status_get_spbonus(struct block_list *bl, enum e_status_bonus type) {
 			if(sc->data[SC_INCMSPRATE])
 				bonus += sc->data[SC_INCMSPRATE]->val1;
 			if(sc->data[SC_RAISINGDRAGON])
-				bonus += (2 + sc->data[SC_RAISINGDRAGON]->val1);
+				bonus += (sc->data[SC_RAISINGDRAGON]->val1);
 			if(sc->data[SC_SERVICE4U])
 				bonus += sc->data[SC_SERVICE4U]->val2;
 			if(sc->data[SC_MERC_SPUP])
@@ -6702,6 +6702,8 @@ static unsigned short status_calc_ematk(struct block_list *bl, struct status_cha
 		matk += sc->data[SC_DORAM_MATK]->val1;
 	if (sc->data[SC_SOULFAIRY])
 		matk += sc->data[SC_SOULFAIRY]->val2;
+	if (sc->data[SC__AUTOSHADOWSPELL])
+		matk += sc->data[SC__AUTOSHADOWSPELL]->val4 * 5;
 
 	return (unsigned short)cap_value(matk,0,USHRT_MAX);
 }
@@ -6751,8 +6753,13 @@ static unsigned short status_calc_matk(struct block_list *bl, struct status_chan
 		matk += sc->data[SC_QUEST_BUFF2]->val1;
 	if (sc->data[SC_QUEST_BUFF3])
 		matk += sc->data[SC_QUEST_BUFF3]->val1;
-	if (sc->data[SC_MAGICPOWER] && sc->data[SC_MAGICPOWER]->val4)
-		matk += matk * sc->data[SC_MAGICPOWER]->val3/100;
+#ifdef RENEWAL
+	if (sc->data[SC_MAGICPOWER])
+		matk += matk * sc->data[SC_MAGICPOWER]->val2/100;
+#else
+	if (sc->data[SC_MAGICPOWER])
+		matk += matk * sc->data[SC_MAGICPOWER]->val2/100;
+#endif
 	if (sc->data[SC_MINDBREAKER])
 		matk += matk * sc->data[SC_MINDBREAKER]->val2/100;
 	if (sc->data[SC_INCMATKRATE])
@@ -10340,14 +10347,14 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			}
 			break;
 		case SC_MAGICPOWER:
-			// val1: Skill lv
-			val2 = 1; // Lasts 1 invocation
 #ifdef RENEWAL
-			val3 = 10 * val1; // Matk% increase
+			// val1: Skill lv
+			val2 = 5 * val1; // Matk% increase
 #else
+			val2 = 1; // Lasts 1 invocation
 			val3 = 5 * val1; // Matk% increase
-#endif
 			val4 = 0; // 0 = ready to be used, 1 = activated and running
+#endif
 			break;
 		case SC_SACRIFICE:
 			val2 = 5; // Lasts 5 hits
@@ -11427,6 +11434,9 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			sc_start(src,bl,SC_STRIPWEAPON,100,val1,tick);
 			sc_start(src,bl,SC_STRIPSHIELD,100,val1,tick);
 			break;
+		case SC__AUTOSHADOWSPELL:
+			val4 = pc_checkskill(sd, SC_AUTOSHADOWSPELL);
+			break;
 		case SC_GN_CARTBOOST:
 			if( val1 < 3 )
 				val2 = 50;
@@ -11579,10 +11589,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_LIGHTNINGWALK: // [(Job Level / 2) + (40 + 5 * Skill Level)] %
 			val1 = (sd?sd->status.job_level:2)/2 + 40 + 5 * val1;
-			break;
-		case SC_RAISINGDRAGON:
-			val3 = tick / 5000;
-			tick_time = 5000; // [GodLesZ] tick time
 			break;
 		case SC_GT_ENERGYGAIN:
 			val2 = 10 + 5 * val1; // Sphere gain chance.
@@ -11880,8 +11886,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_UNLIMIT:
 			val2 = 50 * val1;
-			status_change_start(bl, bl, SC_DEFSET, 10000, 1, 0, 0, 0, tick, SCSTART_NOTICKDEF);
-			status_change_start(bl, bl, SC_MDEFSET, 10000, 1, 0, 0, 0, tick, SCSTART_NOTICKDEF);
 			break;
 		case SC_MONSTER_TRANSFORM:
 		case SC_ACTIVE_MONSTER_TRANSFORM:
@@ -12755,9 +12759,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 				break;
 			}
 			break;
-		case SC_RAISINGDRAGON:
-			sce->val2 = status->max_hp / 100; // Officially tested its 1%hp drain. [Jobbie]
-			break;
 		case SC_C_MARKER:
 			//Send mini-map, don't wait for first timer triggered
 			if (src->type == BL_PC && (sd = map_id2sd(src->id)))
@@ -13454,7 +13455,7 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 				map_foreachinallrange(status_change_timer_sub, bl, AREA_SIZE + 3, BL_CHAR, bl, sce, SC_CURSEDCIRCLE_TARGET, gettick());
 			break;
 		case SC_RAISINGDRAGON:
-			if( sd && sce->val2 && !pc_isdead(sd) ) {
+			if( sd && !pc_isdead(sd) ) {
 				int i = min(sd->spiritball,5);
 				pc_delspiritball(sd, sd->spiritball, 0);
 				status_change_end(bl, SC_EXPLOSIONSPIRITS, INVALID_TIMER);
@@ -14533,15 +14534,6 @@ TIMER_FUNC(status_change_timer){
 			if( !status_charge(bl,hp,sp) ) break;
 
 			sc_timer_next(5000+tick);
-			return 0;
-		}
-		break;
-
-	case SC_RAISINGDRAGON:
-		// 1% every 5 seconds [Jobbie]
-		if( --(sce->val3)>0 && status_charge(bl, sce->val2, 0) ) {
-			if( !sc->data[type] ) return 0;
-			sc_timer_next(5000 + tick);
 			return 0;
 		}
 		break;
