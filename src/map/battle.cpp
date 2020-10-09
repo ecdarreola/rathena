@@ -4282,7 +4282,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case RA_SENSITIVEKEEN:
 			skillratio += 50 * skill_lv;
 			break;
-		case NC_BOOSTKNUCKLE:
+		case NC_BOOSTKNUCKLE: //-100 + 100 + 200 * skill_lv (300, 500, 700, 900 ,1100)
 			skillratio += 200 * skill_lv + status_get_dex(src);
 			RE_LVL_DMOD(100);
 			break;
