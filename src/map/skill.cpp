@@ -20501,20 +20501,21 @@ void skill_toggle_magicpower(struct block_list *bl, uint16 skill_id)
 	if (skill_get_nk(skill_id, NK_NODAMAGE) || !(skill_get_type(skill_id)&BF_MAGIC))
 		return;
 
-//	if (sc && sc->count && sc->data[SC_MAGICPOWER]) {
-//		if (sc->data[SC_MAGICPOWER]->val4) {
-//			status_change_end(bl, SC_MAGICPOWER, INVALID_TIMER);
-//		} else {
-//			sc->data[SC_MAGICPOWER]->val4 = 1;
-//			status_calc_bl(bl, status_sc2scb_flag(SC_MAGICPOWER));
-//#ifndef RENEWAL
-//			if(bl->type == BL_PC){// update current display.
-//				clif_updatestatus(((TBL_PC *)bl),SP_MATK1);
-//				clif_updatestatus(((TBL_PC *)bl),SP_MATK2);
-//			}
-//#endif
-//		}
-//	}
+#ifndef RENEWAL
+	if (sc && sc->count && sc->data[SC_MAGICPOWER]) {
+		if (sc->data[SC_MAGICPOWER]->val4) {
+			status_change_end(bl, SC_MAGICPOWER, INVALID_TIMER);
+		} else {
+			sc->data[SC_MAGICPOWER]->val4 = 1;
+			status_calc_bl(bl, status_sc2scb_flag(SC_MAGICPOWER));
+			if(bl->type == BL_PC){// update current display.
+				clif_updatestatus(((TBL_PC *)bl),SP_MATK1);
+				clif_updatestatus(((TBL_PC *)bl),SP_MATK2);
+			}
+
+		}
+	}
+#endif
 }
 
 

@@ -6753,8 +6753,13 @@ static unsigned short status_calc_matk(struct block_list *bl, struct status_chan
 		matk += sc->data[SC_QUEST_BUFF2]->val1;
 	if (sc->data[SC_QUEST_BUFF3])
 		matk += sc->data[SC_QUEST_BUFF3]->val1;
+#ifdef RENEWAL
 	if (sc->data[SC_MAGICPOWER])
 		matk += matk * sc->data[SC_MAGICPOWER]->val2/100;
+#else
+	if (sc->data[SC_MAGICPOWER])
+		matk += matk * sc->data[SC_MAGICPOWER]->val2/100;
+#endif
 	if (sc->data[SC_MINDBREAKER])
 		matk += matk * sc->data[SC_MINDBREAKER]->val2/100;
 	if (sc->data[SC_INCMATKRATE])
@@ -10342,8 +10347,14 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			}
 			break;
 		case SC_MAGICPOWER:
+#ifdef RENEWAL
 			// val1: Skill lv
 			val2 = 5 * val1; // Matk% increase
+#else
+			val2 = 1; // Lasts 1 invocation
+			val3 = 5 * val1; // Matk% increase
+			val4 = 0; // 0 = ready to be used, 1 = activated and running
+#endif
 			break;
 		case SC_SACRIFICE:
 			val2 = 5; // Lasts 5 hits

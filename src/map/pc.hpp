@@ -1033,14 +1033,14 @@ short pc_maxaspd(struct map_session_data *sd);
 	#define pc_rightside_mdef(sd) ( (sd)->battle_status.mdef2 - ((sd)->battle_status.vit>>1) )
 #define pc_leftside_matk(sd) \
     (\
-    ((sd)->sc.data[SC_MAGICPOWER]) \
-		?((sd)->battle_status.matk_min * 100 + 50) / ((sd)->sc.data[SC_MAGICPOWER]->val2+100) \
+    ((sd)->sc.data[SC_MAGICPOWER] && (sd)->sc.data[SC_MAGICPOWER]->val4) \
+		?((sd)->battle_status.matk_min * 100 + 50) / ((sd)->sc.data[SC_MAGICPOWER]->val3+100) \
         :(sd)->battle_status.matk_min \
     )
 #define pc_rightside_matk(sd) \
     (\
-    ((sd)->sc.data[SC_MAGICPOWER]) \
-		?((sd)->battle_status.matk_max * 100 + 50) / ((sd)->sc.data[SC_MAGICPOWER]->val2+100) \
+    ((sd)->sc.data[SC_MAGICPOWER] && (sd)->sc.data[SC_MAGICPOWER]->val4) \
+		?((sd)->battle_status.matk_max * 100 + 50) / ((sd)->sc.data[SC_MAGICPOWER]->val3+100) \
         :(sd)->battle_status.matk_max \
     )
 #endif
