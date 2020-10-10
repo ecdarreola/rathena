@@ -2640,6 +2640,7 @@ static bool is_attack_critical(struct Damage* wd, struct block_list *src, struct
 #ifdef RENEWAL
 			case ASC_BREAKER:
 #endif
+			case LG_CANNONSPEAR:
 			case GC_CROSSIMPACT:
 				cri /= 2;
 				break;
@@ -4355,7 +4356,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case LG_BANISHINGPOINT:
-			skillratio += -100 + (50 * skill_lv) + ((sd) ? pc_checkskill(sd,SM_BASH) * 30 : 0);
+			skillratio += -100 + (80 * skill_lv) + ((sd) ? pc_checkskill(sd,SM_BASH) * 30 : 0);
 			RE_LVL_DMOD(100);
 			break;
 		case LG_SHIELDPRESS:
@@ -4394,7 +4395,10 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case LG_OVERBRAND:
-			skillratio += -100 + 400 * skill_lv + ((sd) ? pc_checkskill(sd,CR_SPEARQUICKEN) * 50 : 0);
+			if(sc && sc->data[SC_OVERBRANDREADY])
+				skillratio += -100 + 450 * skill_lv + ((sd) ? pc_checkskill(sd,CR_SPEARQUICKEN) * 50 : 0);
+			else
+				skillratio += -100 + 300 * skill_lv + ((sd) ? pc_checkskill(sd,CR_SPEARQUICKEN) * 50 : 0);
 			RE_LVL_DMOD(100);
 			break;
 		case LG_OVERBRAND_BRANDISH:
@@ -4405,12 +4409,16 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += -100 + 200 * skill_lv + rnd()%90 + 10;
 			break;
 		case LG_EARTHDRIVE:
+#ifdef RENEWAL
+			skillratio += -100 + 380 * skill_lv + status_get_str(src) + status_get_vit(src);
+#else
 			if (sd) {
 				short index = sd->equip_index[EQI_HAND_L];
 
 				if (index >= 0 && sd->inventory_data[index] && sd->inventory_data[index]->type == IT_ARMOR)
 					skillratio += -100 + (skill_lv + 1) * sd->inventory_data[index]->weight / 10;
 			}
+#endif
 			RE_LVL_DMOD(100);
 			break;
 		case LG_HESPERUSLIT:
@@ -6165,6 +6173,10 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 			if (skill_lv == 2)
 				s_ele = ELE_HOLY;
 			break;
+		case LG_RAYOFGENESIS:
+			if( sc && sc->data[SC_INSPIRATION] )
+				s_ele = ELE_NEUTRAL;
+			break;
 		case WL_HELLINFERNO:
 			if (mflag & 2) { // ELE_DARK
 				s_ele = ELE_DARK;
@@ -6575,9 +6587,9 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						RE_LVL_DMOD(100); // ! TODO: Confirm new formula
 						break;
 					case LG_RAYOFGENESIS:
-						skillratio += -100 + 200 * skill_lv;
+						skillratio += -100 + 230 * skill_lv + sstatus->int_;
 						if(sc && sc->data[SC_INSPIRATION])
-							skillratio += 1400;
+							skillratio += 70 * skill_lv;
 						RE_LVL_DMOD(100);
 						break;
 					case LG_SHIELDSPELL: // [(Casters Base Level x 4) + (Shield MDEF x 100) + (Casters INT x 2)] %
@@ -7433,14 +7445,12 @@ int64 battle_calc_return_damage(struct block_list* bl, struct block_list *src, i
 	}
 
 	if (ssc) {
+#ifndef RENEWAL
 		if (ssc->data[SC_INSPIRATION]) {
 			rdamage += damage / 100;
-#ifdef RENEWAL
-			rdamage = cap_value(rdamage, 1, max_damage);
-#else
 			rdamage = i64max(rdamage, 1);
-#endif
 		}
+#endif
 		if (ssc->data[SC_VENOMBLEED] && ssc->data[SC_VENOMBLEED]->val3 == 0)
 			rdamage -= damage * ssc->data[SC_VENOMBLEED]->val2 / 100;
 	}

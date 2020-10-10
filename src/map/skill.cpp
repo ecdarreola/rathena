@@ -1781,21 +1781,28 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 				break;
 		}
 		break;
+
 	case LG_MOONSLASHER:
+#ifdef RENEWAL
+		sc_start(src,bl,SC_OVERBRANDREADY,100,skill_lv,skill_get_time2(skill_id,skill_lv));
+#else
 		rate = 32 + 8 * skill_lv;
 		if( rnd()%100 < rate && dstsd ) // Uses skill_addtimerskill to avoid damage and setsit packet overlaping. Officially clif_setsit is received about 500 ms after damage packet.
 			skill_addtimerskill(src,tick+500,bl->id,0,0,skill_id,skill_lv,BF_WEAPON,0);
 		else if( dstmd )
 			sc_start(src,bl,SC_STOP,100,skill_lv,skill_get_time(skill_id,skill_lv) + 1000 * (rnd()%3));
+#endif
 		break;
 	case LG_RAYOFGENESIS:	// 50% chance to cause Blind on Undead and Demon monsters.
 		if ( battle_check_undead(status_get_race(bl), status_get_element(bl)) || status_get_race(bl) == RC_DEMON )
 			sc_start(src,bl, SC_BLIND, 50, skill_lv, skill_get_time(skill_id,skill_lv));
 		break;
+#ifndef RENEWAL
 	case LG_EARTHDRIVE:
 		skill_break_equip(src,src, EQP_SHIELD, 100 * skill_lv, BCT_SELF);
 		sc_start(src,bl, SC_EARTHDRIVE, 100, skill_lv, skill_get_time(skill_id, skill_lv));
 		break;
+#endif
 	case LG_HESPERUSLIT:
 		if( sc && sc->data[SC_BANDING] && sc->data[SC_BANDING]->val2 > 3 )
 			status_change_start(src,bl, SC_STUN, 10000, skill_lv, 0, 0, 0, rnd_value(4000, 8000), SCSTART_NOTICKDEF);
@@ -3224,11 +3231,13 @@ void skill_attack_blow(struct block_list *src, struct block_list *dsrc, struct b
 
 	// Blown-specific handling
 	switch( skill_id ) {
+#ifndef RENEWAL
 		case LG_OVERBRAND_BRANDISH:
 			// Give knockback damage bonus only hits the wall. (bugreport:9096)
 			if (skill_blown(dsrc,target,blewcount,dir,(enum e_skill_blown)(BLOWN_NO_KNOCKBACK_MAP|BLOWN_MD_KNOCKBACK_IMMUNE|BLOWN_TARGET_NO_KNOCKBACK|BLOWN_TARGET_BASILICA)) < blewcount)
 				skill_addtimerskill(src, tick + status_get_amotion(src), target->id, 0, 0, LG_OVERBRAND_PLUSATK, skill_lv, BF_WEAPON, flag|SD_ANIMATION);
 			break;
+#endif
 		case SR_KNUCKLEARROW:
 			// Ignore knockback damage bonus if in WOE (player cannot be knocked in WOE)
 			// Boss & Immune Knockback stay in place and don't get bonus damage
@@ -4316,7 +4325,9 @@ static TIMER_FUNC(skill_timerskill){
 				case NPC_REVERBERATION_ATK:
 					skill_castend_damage_id(src,target,skl->skill_id,skl->skill_lv,tick,skl->flag|SD_LEVEL|SD_ANIMATION);
 					break;
+#ifndef RENEWAL
 				case LG_MOONSLASHER:
+#endif
 				case SR_WINDMILL:
 					if( target->type == BL_PC ) {
 						struct map_session_data *tsd = NULL;
@@ -5095,6 +5106,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case GC_COUNTERSLASH:
 	case LG_MOONSLASHER:
 	case LG_EARTHDRIVE:
+	case LG_RAYOFGENESIS:
 	case SR_RAMPAGEBLASTER:
 	case SR_TIGERCANNON:
 	case SR_SKYNETBLOW:
@@ -5404,7 +5416,9 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case NJ_HUUJIN:
 	case AB_HIGHNESSHEAL:
 	case AB_DUPLELIGHT_MAGIC:
+#ifndef RENEWAL
 	case LG_RAYOFGENESIS:
+#endif
 	case WM_METALICSOUND:
 	case KO_KAIHOU:
 	case MH_ERASER_CUTTER:
@@ -7455,6 +7469,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case SR_SKYNETBLOW:
 	case SR_RAMPAGEBLASTER:
 	case SR_HOWLINGOFLION:
+	case LG_RAYOFGENESIS:
 	case KO_HAPPOKUNAI:
 	case RL_FIREDANCE:
 	case RL_R_TRIP:
@@ -10464,8 +10479,10 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		break;
 
 	case LG_INSPIRATION:
+#ifndef RENEWAL
 		if( sd && !map_getmapflag(sd->bl.m, MF_NOEXPPENALTY) && battle_config.exp_cost_inspiration )
 			pc_lostexp(sd, u64min(sd->status.base_exp, pc_nextbaseexp(sd) * battle_config.exp_cost_inspiration / 100), 0); // 1% penalty.
+#endif
 		clif_skill_nodamage(bl,src,skill_id,skill_lv, sc_start(src,bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv)));
 		break;
 	case SR_CURSEDCIRCLE:
@@ -12819,10 +12836,12 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 		clif_skill_nodamage(src,src,skill_id,skill_lv,1);
 		break;
 
+#ifndef RENEWAL
 	case LG_RAYOFGENESIS:
 		i = skill_get_splash(skill_id,skill_lv);
 		map_foreachinarea(skill_area_sub,src->m,x-i,y-i,x+i,y+i,BL_CHAR|BL_SKILL,src,skill_id,skill_lv,tick,flag|BCT_ENEMY|1,skill_castend_damage_id);
 		break;
+#endif
 
 	case WM_DOMINION_IMPULSE:
 		i = skill_get_splash(skill_id, skill_lv);
@@ -15769,7 +15788,9 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 			}
 			break;
 		case PR_REDEMPTIO:
+#ifndef RENEWAL
 		case LG_INSPIRATION:
+#endif
 			{
 				t_exp exp;
 				uint32 exp_needp;
@@ -15777,9 +15798,11 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 					case PR_REDEMPTIO:
 						exp_needp = battle_config.exp_cost_redemptio;
 						break;
+#ifndef RENEWAL
 					case LG_INSPIRATION:
 						exp_needp = battle_config.exp_cost_inspiration;
 						break;
+#endif
 				}
 				if (exp_needp && ((exp = pc_nextbaseexp(sd)) > 0 && get_percentage_exp(sd->status.base_exp, exp) < exp_needp)) {
 					clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0); //Not enough exp.
@@ -16019,6 +16042,20 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 				}
 			}
 			break;
+#ifdef RENEWAL
+		case LG_BANDING:
+			if( sc && sc->data[SC_INSPIRATION] )
+				return true; // Don't check for partner.
+			break;
+		case LG_PRESTIGE:
+			if( sc && sc->data[SC_INSPIRATION] )
+				return true; // Don't check for partner.
+			if( sc && sc->data[SC_BANDING] ) {
+				clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
+				return false;
+			}
+			break;
+#else
 		case LG_BANDING:
 			if( sc && sc->data[SC_INSPIRATION] ) {
 				clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
@@ -16031,6 +16068,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 				return false;
 			}
 			break;
+#endif
 		case LG_RAGEBURST:
 			if( sd->spiritball == 0 ) {
 				clif_skill_fail(sd,skill_id,USESKILL_FAIL_SKILLINTERVAL,0);
@@ -16050,6 +16088,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 				}
 			}
 			break;
+#ifndef RENEWAL
 		case LG_HESPERUSLIT:
 			if (sc && sc->data[SC_INSPIRATION])
 				return true; // Don't check for partner.
@@ -16060,6 +16099,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 			if (sc->data[SC_BANDING] && sc->data[SC_BANDING]->val2 < 3)
 				return false; // Just fails, no msg here.
 			break;
+#endif
 		case LG_RAYOFGENESIS:
 			if (sc && sc->data[SC_INSPIRATION])
 				return true; // Don't check for partner.

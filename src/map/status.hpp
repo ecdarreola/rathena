@@ -939,7 +939,8 @@ enum sc_type : int16 {
 	SC_EP16_2_BUFF_SC,
 	SC_EP16_2_BUFF_AC,
 	
-	// Sorcerer
+	// Job Improvement Bundle
+	SC_OVERBRANDREADY,
 	SC_CLOUD_POISON,
 
 #ifdef RENEWAL
