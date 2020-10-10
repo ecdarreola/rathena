@@ -938,6 +938,9 @@ enum sc_type : int16 {
 	SC_EP16_2_BUFF_SS,
 	SC_EP16_2_BUFF_SC,
 	SC_EP16_2_BUFF_AC,
+	
+	// Sorcerer
+	SC_CLOUD_POISON,
 
 #ifdef RENEWAL
 	SC_EXTREMITYFIST2, //! NOTE: This SC should be right before SC_MAX, so it doesn't disturb if RENEWAL is disabled

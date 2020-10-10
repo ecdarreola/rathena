@@ -1831,6 +1831,9 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 	case SO_VARETYR_SPEAR:
 		sc_start(src,bl, SC_STUN, 5 * skill_lv, skill_lv, skill_get_time(skill_id, skill_lv));
 		break;
+	case SO_POISON_BUSTER:
+		sc_start(src,bl, SC_POISON, 5 * skill_lv, skill_lv, skill_get_time(skill_id, skill_lv));
+		break;
 	case GN_SLINGITEM_RANGEMELEEATK:
 		if( sd ) {
 			switch( sd->itemid ) {	// Starting SCs here instead of do it in skill_additional_effect to simplify the code.
@@ -5098,6 +5101,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case SR_WINDMILL:
 	case SR_RIDEINLIGHTNING:
 	case SO_VARETYR_SPEAR:
+	case SO_POISON_BUSTER:
 	case GN_CART_TORNADO:
 	case GN_CARTCANNON:
 	case GN_SPORE_EXPLOSION:
@@ -5976,15 +5980,6 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 			map_foreachinallrange(skill_area_sub, bl, skill_get_splash(skill_id, skill_lv), BL_CHAR|BL_SKILL, src, skill_id, skill_lv, tick, flag|BCT_ENEMY|SD_SPLASH|1, skill_castend_damage_id);
 			battle_consume_ammo(sd, skill_id, skill_lv); // Consume here since Magic/Misc attacks reset arrow_atk
 		}
-		break;
-
-	case SO_POISON_BUSTER:
-		if( tsc && tsc->data[SC_POISON] ) {
-			skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag);
-			status_change_end(bl, SC_POISON, INVALID_TIMER);
-		}
-		else if( sd )
-			clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
 		break;
 
 	case KO_JYUMONJIKIRI: {

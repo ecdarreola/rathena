@@ -6194,7 +6194,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				s_ele = sd->spiritcharm_type;
 			break;
 		case AB_ADORAMUS:
-			if( sc & sc->data[SC_ANCILLA] )
+			if( sc && sc->data[SC_ANCILLA] )
 				s_ele = ELE_NEUTRAL;
 			break;
 	}

@@ -947,6 +947,7 @@ void initChangeTables(void)
 	set_sc( SO_SPELLFIST		, SC_SPELLFIST		, EFST_SPELLFIST		, SCB_NONE );
 	set_sc_with_vfx( SO_DIAMONDDUST	, SC_CRYSTALIZE		, EFST_COLD		, SCB_NONE );
 	set_sc( SO_CLOUD_KILL   , SC_CLOUD_POISON         , EFST_CLOUD_POISON, SCB_NONE );
+	add_sc( SO_POISON_BUSTER		, SC_POISON		);
 	set_sc( SO_STRIKING		, SC_STRIKING		, EFST_STRIKING		, SCB_WATK|SCB_CRI );
 	set_sc( SO_WARMER		, SC_WARMER		, EFST_WARMER		, SCB_NONE );
 	set_sc( SO_VACUUM_EXTREME	, SC_VACUUM_EXTREME	, EFST_VACUUM_EXTREME	, SCB_NONE );
@@ -4716,7 +4717,8 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 			sd->bonus.long_attack_atk_rate += sc->data[SC_LUXANIMA]->val3;
 		}
         if (sc->data[SC_STRIKING]) {
-            sd->bonus.perfect_hit += 20 + 10 * val1;
+			skill = pc_checkskill(sd, SO_STRIKING);
+            sd->bonus.perfect_hit += 20 + 10 * skill;
 		}
 	}
 	status_cpy(&sd->battle_status, base_status);
